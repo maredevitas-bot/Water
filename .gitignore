@@ -1,0 +1,15 @@
+.venv/
+.tmp/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+.env.*
+data/raw/
+data/processed/
+reports/
+runs/
+example_inputs.csv
+catboost_info/
+*.log
+.DS_Store

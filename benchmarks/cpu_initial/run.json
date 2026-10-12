@@ -1,0 +1,120 @@
+{
+  "purpose": "research_training",
+  "config": {
+    "years": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "train_end_year": 2022,
+    "validation_year": 2023,
+    "test_year": 2024,
+    "cooling_scope": "once_through",
+    "heldout_plant_fraction": 0.2,
+    "seed": 42,
+    "iterations": 1500,
+    "depth": 6,
+    "learning_rate": 0.04,
+    "early_stopping_rounds": 100,
+    "gpu_devices": "0",
+    "cpu_jobs": -1,
+    "random_forest": {
+      "n_estimators": 500,
+      "max_depth": null,
+      "min_samples_leaf": 2,
+      "max_features": 1.0
+    },
+    "gradient_boosting": {
+      "n_estimators": 500,
+      "learning_rate": 0.04,
+      "max_depth": 3,
+      "min_samples_leaf": 2
+    }
+  },
+  "device": "CPU",
+  "python": "3.12.14",
+  "model_devices": {
+    "ridge": "CPU",
+    "random_forest": "CPU",
+    "gradient_boosting": "CPU",
+    "catboost": "CPU"
+  },
+  "versions": {
+    "numpy": "2.2.6",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.6.1",
+    "catboost": "1.2.8",
+    "openpyxl": "3.1.5"
+  },
+  "data_sha256": "c04a0d3df2c18f48b72251e21997ec12eadc43e361e2f199b8de68299fc6debd",
+  "features": [
+    "intake_temp_c",
+    "log1p_withdrawal_m3_s",
+    "plant_nuclear_mean_mw",
+    "hours_in_service",
+    "month_sin",
+    "month_cos",
+    "cooling_type",
+    "state"
+  ],
+  "target": "delta_temp_c",
+  "selected_by_validation_rmse": "catboost",
+  "mean_delta_c": 11.57150205761317,
+  "best_iteration": 564,
+  "input_training_ranges": {
+    "intake_temp_c": [
+      0.0,
+      31.666666666666668
+    ],
+    "log1p_withdrawal_m3_s": [
+      0.0158349069178615,
+      5.083937085176548
+    ],
+    "plant_nuclear_mean_mw": [
+      36.2258064516129,
+      3799.658333333333
+    ],
+    "hours_in_service": [
+      1.0,
+      744.0
+    ],
+    "month_sin": [
+      -1.0,
+      1.0
+    ],
+    "month_cos": [
+      -1.0,
+      1.0
+    ]
+  },
+  "input_categories": {
+    "cooling_type": [
+      "Once through with Cooling Ponds",
+      "Once through without cooling pond(s) or canal(s)"
+    ],
+    "state": [
+      "AL",
+      "AR",
+      "CA",
+      "CT",
+      "IL",
+      "LA",
+      "MD",
+      "MN",
+      "NC",
+      "NH",
+      "NJ",
+      "NY",
+      "PA",
+      "VA",
+      "WI"
+    ]
+  },
+  "notes": [
+    "GPU floating-point reductions may be nondeterministic.",
+    "Contemporaneous monthly inputs; no prospective or real-time forecast claim.",
+    "Holdouts are never used for early stopping or model selection.",
+    "Temperature error is not a regulatory violation probability."
+  ]
+}

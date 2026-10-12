@@ -1,0 +1,27 @@
+{
+  "years": [2021, 2022, 2023, 2024],
+  "train_end_year": 2022,
+  "validation_year": 2023,
+  "test_year": 2024,
+  "cooling_scope": "once_through",
+  "heldout_plant_fraction": 0.2,
+  "seed": 42,
+  "iterations": 1500,
+  "depth": 6,
+  "learning_rate": 0.04,
+  "early_stopping_rounds": 100,
+  "gpu_devices": "0",
+  "cpu_jobs": -1,
+  "random_forest": {
+    "n_estimators": 500,
+    "max_depth": null,
+    "min_samples_leaf": 2,
+    "max_features": 1.0
+  },
+  "gradient_boosting": {
+    "n_estimators": 500,
+    "learning_rate": 0.04,
+    "max_depth": 3,
+    "min_samples_leaf": 2
+  }
+}

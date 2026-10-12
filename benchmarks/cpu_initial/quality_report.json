@@ -1,0 +1,115 @@
+{
+  "created_at_utc": "2026-10-12T13:40:33.852892+00:00",
+  "config": {
+    "years": [
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "train_end_year": 2022,
+    "validation_year": 2023,
+    "test_year": 2024,
+    "cooling_scope": "once_through",
+    "heldout_plant_fraction": 0.2,
+    "seed": 42,
+    "iterations": 1500,
+    "depth": 6,
+    "learning_rate": 0.04,
+    "early_stopping_rounds": 100,
+    "gpu_devices": "0",
+    "cpu_jobs": -1,
+    "random_forest": {
+      "n_estimators": 500,
+      "max_depth": null,
+      "min_samples_leaf": 2,
+      "max_features": 1.0
+    },
+    "gradient_boosting": {
+      "n_estimators": 500,
+      "learning_rate": 0.04,
+      "max_depth": 3,
+      "min_samples_leaf": 2
+    }
+  },
+  "annual_inventory": [
+    {
+      "year": 2021,
+      "nuclear_plants_in_generation": 56,
+      "nuclear_unit_rows": 94,
+      "cooling_rows_at_nuclear_sites": 876,
+      "raw_sha256": "9db69876593a669a0a02aa67ea3abaebf7dc0ea961424912c75156432851ccd8"
+    },
+    {
+      "year": 2022,
+      "nuclear_plants_in_generation": 55,
+      "nuclear_unit_rows": 93,
+      "cooling_rows_at_nuclear_sites": 840,
+      "raw_sha256": "2f030b7da3802b9310ecd93ef98014890d3519e6d1db55e5a49173121e5e82e4"
+    },
+    {
+      "year": 2023,
+      "nuclear_plants_in_generation": 54,
+      "nuclear_unit_rows": 93,
+      "cooling_rows_at_nuclear_sites": 828,
+      "raw_sha256": "f96326c003bcdc0534144718c96fa8c31f803190e92b936b97d210db27acc557"
+    },
+    {
+      "year": 2024,
+      "nuclear_plants_in_generation": 55,
+      "nuclear_unit_rows": 95,
+      "cooling_rows_at_nuclear_sites": 828,
+      "raw_sha256": "272055f2d748f6486fc3076abd5a40ec736dbff45458bdb4c895761278c50f2b"
+    }
+  ],
+  "all_nuclear_site_cooling_rows": 3372,
+  "eligible_rows": 1671,
+  "eligible_plants": 27,
+  "eligible_cooling_systems": 36,
+  "split_rows": {
+    "train": 648,
+    "test_temporal": 321,
+    "validation": 320,
+    "unused": 288,
+    "test_unseen_plants": 94
+  },
+  "heldout_plants": [
+    3265,
+    6000,
+    6045,
+    6152,
+    8036
+  ],
+  "cooling_type_rows_before_QA": {
+    "Once through without cooling pond(s) or canal(s)": 1644,
+    "Recirculating with Natural Draft Cooling Tower": 768,
+    "Recirculating with Cooling Ponds": 456,
+    "Recirculating with Induced Draft Cooling Tower": 456,
+    "Once through with Cooling Ponds": 48
+  },
+  "missing_fraction_before_QA": {
+    "intake_temp_c": 0.14679715302491103,
+    "discharge_temp_c": 0.12069988137603796,
+    "withdrawal_m3_s": 0.006227758007117438,
+    "plant_nuclear_mean_mw": 0.005634638196915777
+  },
+  "exclusion_reason_counts": {
+    "outside_once_through_scope": 1680,
+    "missing_intake_temperature": 495,
+    "missing_discharge_temperature": 407,
+    "invalid_operating_hours": 52,
+    "missing_or_nonpositive_generation": 52,
+    "missing_or_nonpositive_withdrawal": 47,
+    "not_operable": 23,
+    "intake_outside_QA_range": 7,
+    "discharge_outside_QA_range": 7
+  },
+  "model_data_sha256": "c04a0d3df2c18f48b72251e21997ec12eadc43e361e2f199b8de68299fc6debd",
+  "limitations": [
+    "Monthly conditional prediction, not an ahead-of-time forecast.",
+    "Plant nuclear generation is site context, never allocated to individual cooling systems.",
+    "No measured bypass ratio, cooling electricity, causal derating labels or legal limits.",
+    "Temperatures and flows include source-estimated records; measurement methods are retained.",
+    "No universal heat-load target is derived from monthly means and different stream boundaries."
+  ]
+}

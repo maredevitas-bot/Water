@@ -1,0 +1,66 @@
+[
+  {
+    "file": "f923_2021.zip",
+    "year": 2021,
+    "url": "https://www.eia.gov/electricity/data/eia923/archive/xls/f923_2021.zip",
+    "source_page": "https://www.eia.gov/electricity/data/eia923/",
+    "sha256": "9db69876593a669a0a02aa67ea3abaebf7dc0ea961424912c75156432851ccd8",
+    "bytes": 22281584,
+    "downloaded_at_utc": "2026-10-12T12:18:30.725462+00:00",
+    "verified_at_utc": "2026-10-12T13:43:32.278317+00:00",
+    "members": [
+      "EIA923_Schedule_8_Annual_Environmental_Information_2021_Final_Revision.xlsx",
+      "EIA923_Schedules_2_3_4_5_M_12_2021_Final_Revision.xlsx",
+      "EIA923_Schedules_6_7_NU_SourceNDisposition_2021_Final_Revision.xlsx"
+    ],
+    "note": "Cached file checked locally; not silently refreshed from server."
+  },
+  {
+    "file": "f923_2022.zip",
+    "year": 2022,
+    "url": "https://www.eia.gov/electricity/data/eia923/archive/xls/f923_2022.zip",
+    "source_page": "https://www.eia.gov/electricity/data/eia923/",
+    "sha256": "2f030b7da3802b9310ecd93ef98014890d3519e6d1db55e5a49173121e5e82e4",
+    "bytes": 22871857,
+    "downloaded_at_utc": "2026-10-12T12:18:41.360850+00:00",
+    "verified_at_utc": "2026-10-12T13:43:32.304435+00:00",
+    "members": [
+      "EIA923_Schedule_8_Annual_Environmental_Information_2022_Final.xlsx",
+      "EIA923_Schedules_2_3_4_5_M_12_2022_Final_Revision.xlsx",
+      "EIA923_Schedules_6_7_NU_SourceNDisposition_2022_Final_Revision.xlsx"
+    ],
+    "note": "Cached file checked locally; not silently refreshed from server."
+  },
+  {
+    "file": "f923_2023.zip",
+    "year": 2023,
+    "url": "https://www.eia.gov/electricity/data/eia923/archive/xls/f923_2023.zip",
+    "source_page": "https://www.eia.gov/electricity/data/eia923/",
+    "sha256": "f96326c003bcdc0534144718c96fa8c31f803190e92b936b97d210db27acc557",
+    "bytes": 22359936,
+    "downloaded_at_utc": "2026-10-12T12:18:51.823847+00:00",
+    "verified_at_utc": "2026-10-12T13:43:32.330489+00:00",
+    "members": [
+      "EIA923_Schedule_8_Annual_Envir_Infor_2023_Final.xlsx",
+      "EIA923_Schedules_2_3_4_5_M_12_2023_Final_Revision.xlsx",
+      "EIA923_Schedules_6_7_NU_SourceNDisposition_2023_Final_Revision.xlsx"
+    ],
+    "note": "Cached file checked locally; not silently refreshed from server."
+  },
+  {
+    "file": "f923_2024.zip",
+    "year": 2024,
+    "url": "https://www.eia.gov/electricity/data/eia923/archive/xls/f923_2024.zip",
+    "source_page": "https://www.eia.gov/electricity/data/eia923/",
+    "sha256": "272055f2d748f6486fc3076abd5a40ec736dbff45458bdb4c895761278c50f2b",
+    "bytes": 22755334,
+    "downloaded_at_utc": null,
+    "verified_at_utc": "2026-10-12T13:43:32.361062+00:00",
+    "members": [
+      "EIA923_Schedule_8_Annual_Envir_Infor_2024_Final.xlsx",
+      "EIA923_Schedules_2_3_4_5_M_12_2024_Final.xlsx",
+      "EIA923_Schedules_6_7_NU_SourceNDisposition_2024_Final.xlsx"
+    ],
+    "note": "Cached file checked locally; not silently refreshed from server."
+  }
+]
