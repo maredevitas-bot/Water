@@ -18,3 +18,7 @@ jobs:
           python -m pip install --only-binary=:all: -r requirements-lock.txt
       - run: python -m ripple.doctor
       - run: python -m unittest discover -s tests -v
+      - name: Verify Windows setup with a fresh virtual environment
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: .\setup_windows.ps1 -CpuOnly

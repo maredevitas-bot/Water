@@ -2,6 +2,8 @@
 
 EIA-923 공개자료에서 미국 원자력 발전소의 월별 냉각수 기록을 수집하고, **취수·배수 온도차(°C)**를 회귀 예측합니다. 같은 입력과 데이터 분할로 Random Forest, Gradient Boosting, CatBoost를 비교합니다.
 
+전체 연구에서는 이후 냉각 실험 모델을 연결하여 처리비율과 에너지·물 소비·발전 손실을 평가합니다. 이 저장소가 담당하는 공개데이터 사전 모델의 입출력과 후속 연결 조건은 [연구 범위](MODEL_SCOPE.md)에 명시했습니다.
+
 | 모델 | 실행 장치 | 역할 |
 |---|---|---|
 | 학습자료 평균 온도차 | CPU | 기준선 |
@@ -14,17 +16,31 @@ EIA-923 공개자료에서 미국 원자력 발전소의 월별 냉각수 기록
 
 ## Windows GPU PC에서 시작
 
-필수: Windows 10/11 x64, **Python 3.12 64비트와 Python Launcher(`py`)**, NVIDIA GPU와 드라이버. CatBoost의 공식 Windows/Linux 휠에 GPU 지원이 포함되어 있어 이 구성에 별도 PyTorch/CUDA Toolkit 설치는 필요하지 않습니다. 설치와 데이터 수집에는 인터넷이 필요하며 EIA API 키는 필요하지 않습니다.
+필수: Windows 10/11 x64, Git, **Python 3.12 64비트**(Python Launcher `py` 권장), NVIDIA GPU와 드라이버. `py`가 없으면 PATH의 Python 3.12 x64를 사용합니다. CatBoost의 공식 Windows/Linux 휠에 GPU 지원이 포함되어 있어 이 구성에 별도 PyTorch/CUDA Toolkit 설치는 필요하지 않습니다. 설치와 데이터 수집에는 인터넷이 필요하며 EIA API 키는 필요하지 않습니다.
 
 ```powershell
 git clone https://github.com/maredevitas-bot/Water.git
 cd Water
-.\01_setup.cmd
-.\02_prepare.cmd
-.\03_train_gpu.cmd
+.\00_start_gpu.cmd
 ```
 
-Git이 없으면 GitHub에서 **Code → Download ZIP**을 선택해 압축을 해제한 뒤 같은 이름의 파일을 순서대로 더블클릭합니다.
+이미 집 PC에 저장소를 받아 놓았다면 해당 폴더에서 `git pull --ff-only` 후 `00_start_gpu.cmd`를 실행합니다. 로컬 수정 때문에 갱신이 거부되면 수정 파일을 보존하고 충돌을 먼저 해결하세요.
+
+**`00_start_gpu.cmd` 하나로 설치 → 환경/GPU 검사 → 자동 테스트 → 자료 수집 → 전처리 → 본 학습 → 예측 확인 → 결과 요약을 실행합니다.** 실패한 단계에서 중단하며 CPU로 자동 전환하지 않습니다. Python 자체나 NVIDIA 드라이버는 자동 설치하지 않습니다.
+
+Git이 없으면 GitHub에서 **Code → Download ZIP**으로 내려받아 압축을 해제한 뒤 `00_start_gpu.cmd`를 더블클릭합니다. 원본 자료는 약 90 MB이고 첫 설치·전처리에는 시간이 걸립니다. 다른 학습이 진행 중인 같은 폴더에서 중복 실행하지 마세요.
+
+결과는 `runs/<실행시각>_full/SUMMARY.md`부터 확인합니다. 같은 폴더의 `example_predictions.csv`는 이번에 학습한 모델을 다시 불러온 실제 자료 입력 예시의 예측이며, `provenance/`에는 원본 해시·설정·환경·실행 당시 Git 커밋과 수정 여부가 남습니다. 전체 실행 로그는 `reports/logs/`, 단계별 성공·실패 기록은 `reports/workflows/`에 저장됩니다. 개별 실행 파일을 사용하면 이 통합 실행 기록은 생성되지 않습니다.
+
+설치와 원본 다운로드를 한 번 끝낸 뒤 인터넷 없이 다시 학습하려면:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\run_home_pc.ps1 -Offline
+```
+
+`-Offline`은 라이브러리 설치와 다운로드를 건너뛰고 기존 원본의 해시를 검사한 뒤 전처리부터 다시 합니다. 원본이나 설치가 없으면 중단합니다. 온라인에서 설치만 생략하려면 `-SkipInstall`, 20개 트리로 실행 경로만 확인하려면 `-Smoke`를 추가합니다. `_smoke` 결과는 연구 성능으로 사용하지 않습니다.
+
+단계를 따로 실행하려면 기존 파일도 사용할 수 있습니다:
 
 1. `01_setup.cmd`: 이 폴더에 `.venv` 생성, 버전 고정 라이브러리 설치, 실제 GPU 소규모 연산 점검.
 2. `02_prepare.cmd`: 2021~2024년 EIA 원본 ZIP 다운로드, 단위 변환·품질 검사·데이터 분할. 첫 실행은 수 분 걸릴 수 있습니다.
@@ -36,10 +52,10 @@ Git이 없으면 GitHub에서 **Code → Download ZIP**을 선택해 압축을 �
 GPU가 없거나 CPU로 먼저 확인할 때:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_windows.ps1 -CpuOnly
-.\02_prepare.cmd
-.\03_train_cpu.cmd
+powershell -NoProfile -ExecutionPolicy Bypass -File .\run_home_pc.ps1 -Device CPU
 ```
+
+오류 확인: Python/가상환경 오류는 Python 3.12 x64 설치 여부를 확인하고, GPU 오류는 NVIDIA 드라이버와 `reports/environment_check.json`을 확인합니다. 원본 해시 오류는 파일을 임의로 덮어쓰지 말고 원본 변경 원인을 확인합니다. CPU 실행은 위와 같이 명시적으로 선택합니다.
 
 ## Linux / GPU 서버
 

@@ -79,12 +79,9 @@ def make_cpu_models(cfg, smoke=False):
     }
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--device', choices=['CPU', 'GPU'], default='GPU',
-                    help='CatBoost device only; sklearn RF/GB and Ridge always run on CPU')
-    ap.add_argument('--smoke', action='store_true', help='20 trees; pipeline verification only, never a research result')
-    args = ap.parse_args()
+def train_models(device='GPU', smoke=False):
+    if device not in {'CPU', 'GPU'}:
+        raise ValueError('device must be CPU or GPU')
     cfg = read_config()
     data_path = ROOT / 'data' / 'processed' / 'model_data.csv'
     report = json.loads((ROOT / 'reports' / 'quality_report.json').read_text(encoding='utf-8'))
@@ -95,20 +92,20 @@ def main():
     df = pd.read_csv(data_path, dtype={'cooling_id': str})
     parts = validate_splits(df)
     train, val = parts['train'], parts['validation']
-    run_name = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ') + ('_smoke' if args.smoke else '_full')
+    run_name = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ') + ('_smoke' if smoke else '_full')
     out = ROOT / 'runs' / run_name
     out.mkdir(parents=True, exist_ok=False)
-    cpu_models = make_cpu_models(cfg, args.smoke)
+    cpu_models = make_cpu_models(cfg, smoke)
     for name, estimator in cpu_models.items():
         print(f'Training {name} on CPU...', flush=True)
         estimator.fit(features(train), train[TARGET])
         joblib.dump(estimator, out / f'{name}.joblib')
-    print(f'Training CatBoost gradient boosting on {args.device}...', flush=True)
+    print(f'Training CatBoost gradient boosting on {device}...', flush=True)
     model = CatBoostRegressor(
-        iterations=20 if args.smoke else cfg['iterations'], depth=cfg['depth'],
+        iterations=20 if smoke else cfg['iterations'], depth=cfg['depth'],
         learning_rate=cfg['learning_rate'], loss_function='RMSE', eval_metric='RMSE',
-        random_seed=cfg['seed'], task_type=args.device,
-        **({'devices': cfg['gpu_devices'], 'gpu_ram_part': 0.7} if args.device == 'GPU' else {'thread_count': 4}),
+        random_seed=cfg['seed'], task_type=device,
+        **({'devices': cfg['gpu_devices'], 'gpu_ram_part': 0.7} if device == 'GPU' else {'thread_count': 4}),
         allow_writing_files=False, verbose=100,
     )
     model.fit(features(train), train[TARGET], cat_features=CATEGORICAL,
@@ -147,9 +144,9 @@ def main():
     pd.DataFrame({'feature': NUMERIC + CATEGORICAL, 'importance': model.feature_importances_}).to_csv(
         out / 'feature_importance.csv', index=False, encoding='utf-8-sig')
     dump_json(out / 'run.json', {
-        'purpose': 'smoke_test_only' if args.smoke else 'research_training',
-        'config': cfg, 'device': args.device, 'python': platform.python_version(),
-        'model_devices': {**{name: 'CPU' for name in cpu_models}, 'catboost': args.device},
+        'purpose': 'smoke_test_only' if smoke else 'research_training',
+        'config': cfg, 'device': device, 'python': platform.python_version(),
+        'model_devices': {**{name: 'CPU' for name in cpu_models}, 'catboost': device},
         'versions': {x: importlib.metadata.version(x) for x in ['numpy','pandas','scikit-learn','catboost','openpyxl']},
         'data_sha256': sha256(data_path), 'features': NUMERIC + CATEGORICAL, 'target': TARGET,
         'selected_by_validation_rmse': selected, 'mean_delta_c': constant_delta,
@@ -163,6 +160,16 @@ def main():
     })
     print(scores.to_string(index=False))
     print(f'Run saved: {out}')
+    return out
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--device', choices=['CPU', 'GPU'], default='GPU',
+                    help='CatBoost device only; sklearn RF/GB and Ridge always run on CPU')
+    ap.add_argument('--smoke', action='store_true', help='20 trees; pipeline verification only, never a research result')
+    args = ap.parse_args()
+    return train_models(args.device, args.smoke)
 
 
 if __name__ == '__main__':
